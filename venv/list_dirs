@@ -1,0 +1,79 @@
+import os
+import re
+
+dir2017 = '/media/user/Work/temp/2017/'
+dir2018 = '/media/user/Work/temp/2018/'
+
+BASEDIR = '/media/user/Work/temp/'
+REG = r'^[2-9][0-9]\.[0-9]{2}\:'
+
+
+def show_dirs():  # return dirs appended in list
+    dirs_list = []
+    for item in os.scandir():
+        if item.is_dir():
+            dirs_list.append(item.name)
+            dirs_list.sort()
+    # print(dirs_list)
+    return dirs_list
+
+
+def chdir(dir):
+    try:
+        os.chdir(dir)
+        print('\nПерешел в {}'.format(dir))
+    except FileNotFoundError:
+        print('\nТакой папки не существует\n')
+
+
+def get_files_list(dir):
+    ########  список файлов с путем
+    result = []
+    for address, dirs, files in os.walk(dir):
+        for file in files:
+            if file.endswith(".dwp"):
+                # print(address+'/'+file)                   # первый вариант
+                # print(os.path.join(os.getcwd(), file))    # второй вариант
+
+                full_path = os.path.join(os.getcwd() + '/' + address, file)
+                # print(os.path.join(os.getcwd()+'/'+address,file))
+                result.append(full_path)
+    return result
+
+
+def get_file_data(file_path):
+    with open(file_path, 'r', encoding='utf-8') as file:
+        alist = []
+        for line in file:
+            # alist.append(line)
+            if re.match(REG, line):
+                alist.append(line)
+        return alist
+
+
+chdir(BASEDIR)  # go to working directory
+dirs_list = show_dirs()
+
+dwp_files_list1 = get_files_list(dirs_list[0]) # get all files in dir 2017
+dwp_files_list2 = get_files_list(dirs_list[1]) # get all files in dir 2018
+
+print('first working direcoty:', dirs_list[0])
+print('second working directory:', dirs_list[1], '\n')
+
+# print(dwp_files_list1[1])
+# print(dwp_files_list2[1])
+
+file1 = get_file_data(dwp_files_list1[1])
+file2 = get_file_data(dwp_files_list2[1])
+
+# print(dwp_files_list1[3])
+# print(dwp_files_list2[3])
+print(len(dwp_files_list1))
+
+def write_diffs():
+    with open('tmp', 'w', encoding='utf-8') as tmp_file:
+        l1 = len(file1)
+        for i in range(l1):
+            if file1[i] != file2[i]:
+                tmp_file.write(file1[i])
+                tmp_file.write(file2[i])

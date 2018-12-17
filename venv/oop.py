@@ -145,4 +145,3 @@ class Cabinet():
 test1 = Cabinet(PATH_2017, PATH_2018, DIR_NAME )
 result = test1.start()
 result = test1.compare()
-

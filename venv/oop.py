@@ -16,7 +16,8 @@ REG = r'^[2-9][0-9]\.[0-9]{2}\:' # regexp to get only 20.00 - 100.00 params
 # example
 # 25.04: TORQUE REF B [%];Par.25.4;4;0;-200;200;;3;2
 
-AREG = '^A\d' # to check that file startswith A2 or A3 smthing like that
+AREG = '^A\d'  # to check that file startswith A2 or A3 something like that
+
 
 class Cabinet():
     def __init__(self, path2017, path2018, dirname):
@@ -28,7 +29,6 @@ class Cabinet():
         self.path2018 = PATH_2018+DIR_NAME
         self.dict2017 = {}
         self.dict2018 = {}
-
 
     def create_dict(self, path):
         # dir_example = '/media/user/Work/temp/2017/=JD01E11+MCS02/'
@@ -67,7 +67,6 @@ class Cabinet():
         address = str(address[0])
         return address
 
-
     def rename(self, file, foldername, fullpath):
         # os.rename('old', 'new') << rename file
         # Add A and digit to file name if missing
@@ -80,7 +79,6 @@ class Cabinet():
             return new_name
         else:
             return file
-
 
     def start(self):
         self.dict2017 = self.create_dict(self.path2017)
@@ -112,8 +110,7 @@ class Cabinet():
                     file2018_data = self.get_file_data(path_to_file2018)
                     self.write_diff(file2017_data, file2018_data, file2018['filename'])
 
-
-    def write_diff(self, file2017, file2018, result_filename): #
+    def write_diff(self, file2017, file2018, result_filename):  #
         diffs_counter = 0
         with open(self.result_path+DIR_NAME+result_filename, 'a+', encoding='utf-8') as tmp_file:
             l1 = len(file2017)
@@ -142,6 +139,6 @@ class Cabinet():
             return alist
 
 
-test1 = Cabinet(PATH_2017, PATH_2018, DIR_NAME )
+test1 = Cabinet(PATH_2017, PATH_2018, DIR_NAME)
 result = test1.start()
 result = test1.compare()
